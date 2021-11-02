@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "957429341649",
+    "project_id": "student-essentials-abc48",
+    "storage_bucket": "student-essentials-abc48.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:957429341649:android:57f413a29d3c3c895094f0",
+        "android_client_info": {
+          "package_name": "com.example.studentessentials"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "957429341649-mq9g7n8bafs3oa7kq0mrt3bm94btq1de.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.studentessentials",
+            "certificate_hash": "b76d52fa2b603da56a73f9fd3f7e50df0f58233b"
+          }
+        },
+        {
+          "client_id": "957429341649-nstn7ff4m09lolrbr6erhag387usvm03.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC05RIjWkaZJ4eqOGKHuMmSZrWILu1omoU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "957429341649-nstn7ff4m09lolrbr6erhag387usvm03.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
