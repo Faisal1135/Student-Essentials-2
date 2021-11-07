@@ -1,42 +1,56 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-Box useBox<T>(String boxname) {
+Box<T>? useBox<T>(String boxname) {
   return use(_OpenBoxHive(boxname: boxname));
 }
 
-class _OpenBoxHive extends Hook<Box> {
+class _OpenBoxHive<T> extends Hook<Box<T>?> {
   final String boxname;
 
   const _OpenBoxHive({required this.boxname});
 
   @override
-  __OpenBoxHiveState createState() => __OpenBoxHiveState();
+  __OpenBoxHiveState<T> createState() => __OpenBoxHiveState();
 }
 
-class __OpenBoxHiveState extends HookState<Box, _OpenBoxHive> {
-  late Box hivebox;
+class __OpenBoxHiveState<T> extends HookState<Box<T>?, _OpenBoxHive<T>> {
+  Box<T>? hivebox;
 
   @override
   void initHook() {
     super.initHook();
-
-    Hive.openBox(hook.boxname).then((box) {
-      setState(() {
-        hivebox = box;
-      });
-    });
+    if (!Hive.isBoxOpen(hook.boxname)) {
+      Hive.openBox<T>(hook.boxname).then(
+        (box) {
+          setState(
+            () {
+              hivebox = box;
+            },
+          );
+        },
+      );
+    } else {
+      try {
+        setState(() {
+          hivebox = Hive.box(hook.boxname);
+        });
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+    }
   }
 
   @override
-  Box build(BuildContext context) {
+  Box<T>? build(BuildContext context) {
     return hivebox;
   }
 
   @override
   void dispose() {
-    hivebox.close();
+    hivebox?.close();
     super.dispose();
   }
 }

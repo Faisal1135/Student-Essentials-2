@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:studentessentials/constant.dart';
+import 'package:studentessentials/hooks/box_hook.dart';
 import 'package:studentessentials/result/model/resultmodel.dart';
 import 'package:studentessentials/result/pages/new_result.dart';
 import 'package:studentessentials/result/pages/save_user.dart';
@@ -15,20 +16,19 @@ class ResultHomePage extends HookWidget {
   Widget build(BuildContext context) {
     debugPrint("calling build...");
 
-    final resultBoxs = useState<Box<ResultModel>?>(null);
-    final isLoading = useState(true);
+    final resultBoxs = useBox<ResultModel>(Constant.kBOXResult);
 
-    useEffect(() {
-      if (!Hive.isBoxOpen(Constant.kBOXResult)) {
-        Hive.openBox<ResultModel>(Constant.kBOXResult).then((box) {
-          resultBoxs.value = box;
-          isLoading.value = false;
-        });
-      } else {
-        isLoading.value = false;
-      }
-      return resultBoxs.value?.close;
-    }, const []);
+    // useEffect(() {
+    //   if (!Hive.isBoxOpen(Constant.kBOXResult)) {
+    //     Hive.openBox<ResultModel>(Constant.kBOXResult).then((box) {
+    //       resultBoxs.value = box;
+    //       isLoading.value = false;
+    //     });
+    //   } else {
+    //     isLoading.value = false;
+    //   }
+    //   return resultBoxs.value?.close;
+    // }, const []);
     return Scaffold(
         appBar: AppBar(
           title: const Text('Result Calculator'),
@@ -39,10 +39,13 @@ class ResultHomePage extends HookWidget {
                   Icons.save,
                   color: Colors.white,
                 ),
-                onPressed: () {
-                  Navigator.of(context).pushNamed(UserFormScreen.routeName,
-                      arguments: calculateResultfromBox(resultBoxs.value!));
-                }),
+                onPressed: resultBoxs == null
+                    ? null
+                    : () {
+                        Navigator.of(context).pushNamed(
+                            UserFormScreen.routeName,
+                            arguments: calculateResultfromBox(resultBoxs));
+                      }),
           ],
         ),
         floatingActionButton: FloatingActionButton(
@@ -52,7 +55,7 @@ class ResultHomePage extends HookWidget {
           },
           child: const Icon(Icons.add),
         ),
-        body: isLoading.value
+        body: resultBoxs == null
             ? const CircularProgressIndicator()
             : buildListtile(context));
   }

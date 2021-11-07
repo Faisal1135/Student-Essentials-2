@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hive/hive.dart';
 import 'package:studentessentials/constant.dart';
+import 'package:studentessentials/hooks/box_hook.dart';
 import 'package:studentessentials/result/model/resultmodel.dart';
 
 class UserFormScreen extends HookWidget {
@@ -15,6 +15,8 @@ class UserFormScreen extends HookWidget {
     final finalcpga = ModalRoute.of(context)?.settings.arguments as double;
     debugPrint(finalcpga.toString());
     final usrTextEcontrol = useTextEditingController();
+    final resultbox = useBox<ResultModel>(Constant.kBOXResult);
+    final resultlistbox = useBox<ResultListModel>(Constant.kBOXResulListtModel);
 
     return Scaffold(
       appBar: AppBar(
@@ -41,25 +43,28 @@ class UserFormScreen extends HookWidget {
               height: 15,
             ),
             ElevatedButton(
-              onPressed: () async {
-                final resultlistmodel = ResultListModel.init().copyWith(
-                    results: Hive.box<ResultModel>(Constant.kBOXResulListtModel)
-                        .values
-                        .toList(),
-                    cgpa: finalcpga.toStringAsFixed(2),
-                    username: usrTextEcontrol.text);
+              onPressed: resultbox == null || resultlistbox == null
+                  ? null
+                  : () async {
+                      final resultlistmodel = ResultListModel.init().copyWith(
+                          results: resultbox.values.toList(),
+                          cgpa: finalcpga.toStringAsFixed(2),
+                          username: usrTextEcontrol.text);
+                      await resultlistbox.add(resultlistmodel);
+                      await resultbox.clear();
 
-                debugPrint(resultlistmodel.toString());
-                // final resultsbox = Hive.box<Results>(kresultsBox);
-                // final newResults = Results(
-                //     id: studentId.text,
-                //     results: Hive.box<ResultModel>(kresultBox).values.toList(),
-                //     username: usrTextEcontrol.text,
-                //     cgpa: finalcpga.toStringAsFixed(2));
-                // await resultsbox.add(newResults);
-                // await Hive.box<ResultModel>(kresultBox).clear();
-                // Navigator.of(context).pushNamed(UserResultScreen.routeName);
-              },
+                      // Navigator.pushAndRemoveUntil(context, r, (route) => rou)
+
+                      // final resultsbox = Hive.box<Results>(kresultsBox);
+                      // final newResults = Results(
+                      //     id: studentId.text,
+                      //     results: Hive.box<ResultModel>(kresultBox).values.toList(),
+                      //     username: usrTextEcontrol.text,
+                      //     cgpa: finalcpga.toStringAsFixed(2));
+                      // await resultsbox.add(newResults);
+                      // await Hive.box<ResultModel>(kresultBox).clear();
+                      // Navigator.of(context).pushNamed(UserResultScreen.routeName);
+                    },
               child: const Text("Submit"),
             )
           ],

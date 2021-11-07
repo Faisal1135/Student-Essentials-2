@@ -63,7 +63,7 @@ class HomePage extends StatelessWidget {
       home: body,
       routes: {
         ResultHomePage.routeName: (context) => const ResultHomePage(),
-        UserFormScreen.routeName: (context) => const UserFormScreen()
+        UserFormScreen.routeName: (context) => const UserFormScreen(),
       },
     );
   }

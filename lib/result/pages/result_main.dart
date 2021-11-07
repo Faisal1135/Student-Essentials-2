@@ -9,6 +9,7 @@ import 'package:studentessentials/result/pages/result_home.dart';
 
 class ResultMainPage extends HookWidget {
   const ResultMainPage({Key? key}) : super(key: key);
+  static const routeName = "resultmainpage";
 
   static openResultbox() async {
     if (!Hive.isBoxOpen(Constant.kBOXResulListtModel)) {
@@ -19,20 +20,22 @@ class ResultMainPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final restultlistBox = useState<Box<ResultListModel>?>(null);
+    // final restultlistBox = useState<Box<ResultListModel>?>(null);
 
-    final isLoading = useState(true);
-    useEffect(() {
-      if (!Hive.isBoxOpen(Constant.kBOXResulListtModel)) {
-        Hive.openBox<ResultListModel>(Constant.kBOXResulListtModel).then(
-          (box) {
-            restultlistBox.value = box;
-            isLoading.value = false;
-          },
-        );
-        return restultlistBox.value?.close;
-      }
-    }, const []);
+    // final isLoading = useState(true);
+    final restultlistBox =
+        useBox<ResultListModel>(Constant.kBOXResulListtModel);
+    // useEffect(() {
+    //   if (!Hive.isBoxOpen(Constant.kBOXResulListtModel)) {
+    //     Hive.openBox<ResultListModel>(Constant.kBOXResulListtModel).then(
+    //       (box) {
+    //         restultlistBox.value = box;
+    //         isLoading.value = false;
+    //       },
+    //     );
+    //     return restultlistBox.value?.close;
+    //   }
+    // }, const []);
     return Scaffold(
       appBar: AppBar(
         title: const Text('User list'),
@@ -67,9 +70,9 @@ class ResultMainPage extends HookWidget {
               ),
             ),
           ),
-          isLoading.value
+          restultlistBox == null
               ? const CircularProgressIndicator()
-              : buildResultList(restultlistBox.value!),
+              : buildResultList(restultlistBox),
         ],
       ),
     );
@@ -94,7 +97,6 @@ class ResultMainPage extends HookWidget {
                 radius: 30,
               ),
               title: Text(result.username),
-              subtitle: Text(result.id),
               onTap: () {
                 // Navigator.of(context)
                 //     .pushNamed(ResultofUserScreen.routeName, arguments: result);
