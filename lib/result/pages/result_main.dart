@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hive/hive.dart';
@@ -5,37 +6,18 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:studentessentials/constant.dart';
 import 'package:studentessentials/hooks/box_hook.dart';
 import 'package:studentessentials/result/model/resultmodel.dart';
-import 'package:studentessentials/result/pages/result_home.dart';
+import 'package:studentessentials/result/widgets/result_utils.dart';
+import 'package:studentessentials/routes/routes.gr.dart';
 
 class ResultMainPage extends HookWidget {
   const ResultMainPage({Key? key}) : super(key: key);
   static const routeName = "resultmainpage";
 
-  static openResultbox() async {
-    if (!Hive.isBoxOpen(Constant.kBOXResulListtModel)) {
-      Hive.openBox<ResultListModel>(Constant.kBOXResulListtModel)
-          .then((box) => null);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    // final restultlistBox = useState<Box<ResultListModel>?>(null);
-
-    // final isLoading = useState(true);
     final restultlistBox =
         useBox<ResultListModel>(Constant.kBOXResulListtModel);
-    // useEffect(() {
-    //   if (!Hive.isBoxOpen(Constant.kBOXResulListtModel)) {
-    //     Hive.openBox<ResultListModel>(Constant.kBOXResulListtModel).then(
-    //       (box) {
-    //         restultlistBox.value = box;
-    //         isLoading.value = false;
-    //       },
-    //     );
-    //     return restultlistBox.value?.close;
-    //   }
-    // }, const []);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('User list'),
@@ -44,7 +26,7 @@ class ResultMainPage extends HookWidget {
         children: <Widget>[
           InkWell(
             onTap: () {
-              Navigator.pushNamed(context, ResultHomePage.routeName);
+              context.router.push(const ResultHomePageRoute());
             },
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -90,14 +72,26 @@ class ResultMainPage extends HookWidget {
           itemBuilder: (BuildContext context, int index) {
             final result = value.getAt(index) ?? ResultListModel.init();
             return ListTile(
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               leading: CircleAvatar(
                 child: result.cgpa == '0'
-                    ? const FittedBox(child: Text('No CGPA'))
-                    : FittedBox(child: Text(result.cgpa)),
+                    ? const FittedBox(
+                        child: Text('No CGPA'),
+                      )
+                    : FittedBox(
+                        child: Text(
+                          calculateGradeFromCGPA(
+                            double.tryParse(result.cgpa) ?? 0,
+                          ),
+                        ),
+                      ),
                 radius: 30,
               ),
               title: Text(result.username),
+              subtitle: Text(result.cgpa),
               onTap: () {
+                context.router.push(ResultDetailsRoute(results: result));
                 // Navigator.of(context)
                 //     .pushNamed(ResultofUserScreen.routeName, arguments: result);
               },

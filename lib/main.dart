@@ -3,9 +3,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:studentessentials/result/model/resultmodel.dart';
-import 'package:studentessentials/result/pages/result_home.dart';
-import 'package:studentessentials/result/pages/result_main.dart';
-import 'package:studentessentials/result/pages/save_user.dart';
+import 'package:studentessentials/routes/routes.gr.dart';
+import 'package:studentessentials/skechpad/skechpad.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,6 +24,7 @@ class AsyncInitLoader extends HookWidget {
     Hive.registerAdapter<ResultListModel>(ResultListModelAdapter());
     Hive.registerAdapter<Owner>(OwnerAdapter());
     Hive.registerAdapter<ResultModel>(ResultModelAdapter());
+    Hive.registerAdapter<ColoredPath>(ColoredPathAdapter());
   }
 
   AsyncInitLoader({Key? key}) : super(key: key);
@@ -34,37 +34,32 @@ class AsyncInitLoader extends HookWidget {
     final _fireinit = useFuture(_initialization);
 
     if (_fireinit.connectionState == ConnectionState.waiting) {
-      return const HomePage(
-        body: Scaffold(body: Text('loading...')),
+      return const MaterialApp(
+        home: Scaffold(
+          body: Text('loading...'),
+        ),
       );
     }
 
     if (_fireinit.hasError) {
-      return HomePage(
-        body: Scaffold(body: Text('Something went wrong ${_fireinit.error}')),
+      return MaterialApp(
+        home: Scaffold(body: Text('Something went wrong ${_fireinit.error}')),
       );
     }
-    return const HomePage(
-      title: "Result App",
-      body: ResultMainPage(),
-    );
+    return const HomePage();
   }
 }
 
 class HomePage extends StatelessWidget {
-  final Widget body;
-  final String title;
-  const HomePage({Key? key, required this.body, this.title = "Your Title"})
-      : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: body,
-      routes: {
-        ResultHomePage.routeName: (context) => const ResultHomePage(),
-        UserFormScreen.routeName: (context) => const UserFormScreen(),
-      },
+    final _appRouter = AppRouter();
+    return MaterialApp.router(
+      title: "Student Essentials",
+      routeInformationParser: _appRouter.defaultRouteParser(),
+      routerDelegate: _appRouter.delegate(),
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hive/hive.dart';
@@ -6,7 +7,7 @@ import 'package:studentessentials/constant.dart';
 import 'package:studentessentials/hooks/box_hook.dart';
 import 'package:studentessentials/result/model/resultmodel.dart';
 import 'package:studentessentials/result/pages/new_result.dart';
-import 'package:studentessentials/result/pages/save_user.dart';
+import 'package:studentessentials/routes/routes.gr.dart';
 
 class ResultHomePage extends HookWidget {
   const ResultHomePage({Key? key}) : super(key: key);
@@ -18,17 +19,6 @@ class ResultHomePage extends HookWidget {
 
     final resultBoxs = useBox<ResultModel>(Constant.kBOXResult);
 
-    // useEffect(() {
-    //   if (!Hive.isBoxOpen(Constant.kBOXResult)) {
-    //     Hive.openBox<ResultModel>(Constant.kBOXResult).then((box) {
-    //       resultBoxs.value = box;
-    //       isLoading.value = false;
-    //     });
-    //   } else {
-    //     isLoading.value = false;
-    //   }
-    //   return resultBoxs.value?.close;
-    // }, const []);
     return Scaffold(
         appBar: AppBar(
           title: const Text('Result Calculator'),
@@ -42,9 +32,11 @@ class ResultHomePage extends HookWidget {
                 onPressed: resultBoxs == null
                     ? null
                     : () {
-                        Navigator.of(context).pushNamed(
-                            UserFormScreen.routeName,
-                            arguments: calculateResultfromBox(resultBoxs));
+                        context.router.push(
+                          UserFormScreenRoute(
+                            finalcpga: calculateResultfromBox(resultBoxs),
+                          ),
+                        );
                       }),
           ],
         ),

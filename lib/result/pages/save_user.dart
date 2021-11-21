@@ -1,19 +1,19 @@
+import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:studentessentials/constant.dart';
 import 'package:studentessentials/hooks/box_hook.dart';
 import 'package:studentessentials/result/model/resultmodel.dart';
+import 'package:studentessentials/routes/routes.gr.dart';
 
 class UserFormScreen extends HookWidget {
-  static const routeName = '/user-form-page';
+  final double finalcpga;
 
-  const UserFormScreen({Key? key}) : super(key: key);
+  const UserFormScreen(this.finalcpga, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final finalcpga = ModalRoute.of(context)?.settings.arguments as double;
-    debugPrint(finalcpga.toString());
     final usrTextEcontrol = useTextEditingController();
     final resultbox = useBox<ResultModel>(Constant.kBOXResult);
     final resultlistbox = useBox<ResultListModel>(Constant.kBOXResulListtModel);
@@ -33,7 +33,7 @@ class UserFormScreen extends HookWidget {
                 ),
                 TextField(
                   decoration:
-                      const InputDecoration(labelText: "Enter Your userName"),
+                      const InputDecoration(labelText: "Enter Your User Name"),
                   controller: usrTextEcontrol,
                   keyboardType: TextInputType.text,
                 )
@@ -52,18 +52,7 @@ class UserFormScreen extends HookWidget {
                           username: usrTextEcontrol.text);
                       await resultlistbox.add(resultlistmodel);
                       await resultbox.clear();
-
-                      // Navigator.pushAndRemoveUntil(context, r, (route) => rou)
-
-                      // final resultsbox = Hive.box<Results>(kresultsBox);
-                      // final newResults = Results(
-                      //     id: studentId.text,
-                      //     results: Hive.box<ResultModel>(kresultBox).values.toList(),
-                      //     username: usrTextEcontrol.text,
-                      //     cgpa: finalcpga.toStringAsFixed(2));
-                      // await resultsbox.add(newResults);
-                      // await Hive.box<ResultModel>(kresultBox).clear();
-                      // Navigator.of(context).pushNamed(UserResultScreen.routeName);
+                      context.router.replace(const ResultMainPageRoute());
                     },
               child: const Text("Submit"),
             )
