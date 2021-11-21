@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:studentessentials/notes/models/note_model.dart';
 import 'package:studentessentials/result/model/resultmodel.dart';
 import 'package:studentessentials/routes/routes.gr.dart';
 import 'package:studentessentials/skechpad/skechpad.dart';
@@ -25,6 +26,8 @@ class AsyncInitLoader extends HookWidget {
     Hive.registerAdapter<Owner>(OwnerAdapter());
     Hive.registerAdapter<ResultModel>(ResultModelAdapter());
     Hive.registerAdapter<ColoredPath>(ColoredPathAdapter());
+    Hive.registerAdapter<NoteModel>(NoteModelAdapter());
+    Hive.registerAdapter<NoteTag>(NoteTagAdapter());
   }
 
   AsyncInitLoader({Key? key}) : super(key: key);

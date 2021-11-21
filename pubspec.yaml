@@ -31,17 +31,18 @@ dependencies:
   charts_flutter: ^0.12.0
   cupertino_icons: ^1.0.2
   firebase_core: ^1.8.0
-  google_ml_kit: ^0.7.3
   flutter:
     sdk: flutter
   flutter_hooks: ^0.18.0
   getwidget: ^2.0.4
   google_fonts: ^2.1.0
+  google_ml_kit: ^0.7.3
   hive: ^2.0.4
   hive_flutter: ^1.1.0
   image_picker: ^0.8.4+4
   intl: ^0.17.0
   rflutter_alert: ^2.0.4
+  staggered_grid_view_flutter: ^0.0.4
   uuid: ^3.0.5
 
 dev_dependencies:

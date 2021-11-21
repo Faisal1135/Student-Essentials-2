@@ -1,8 +1,7 @@
-import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:studentessentials/ocr/homepage.dart';
 import '../routes/routes.gr.dart';
+import 'package:auto_route/auto_route.dart';
 
 class AppItemModel {
   final String title;
@@ -49,6 +48,15 @@ class AppItemModel {
         onTap: () {
           context.router.push(
             const OcrPageRoute(),
+          );
+        },
+      ),
+      AppItemModel(
+        title: 'Take Note',
+        iconData: Icons.note_add,
+        onTap: () {
+          context.router.push(
+            NotesScreenRoute(),
           );
         },
       ),

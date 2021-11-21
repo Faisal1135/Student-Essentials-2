@@ -1,9 +1,9 @@
-import 'package:auto_route/auto_route.dart';
+// import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 import 'package:studentessentials/models/app_item.dart';
-import 'package:studentessentials/routes/routes.gr.dart';
+// import 'package:studentessentials/routes/routes.gr.dart';
 import './models/app_item.dart';
 
 class AppMain extends HookWidget {
